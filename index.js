@@ -4,6 +4,16 @@ const options = {
     title: 'My modal title',
     closable: true,
     content: content,
-    modalWidth: '400px'
+    modalWidth: '400px',
+    buttons: [
+        {text: 'OK', type: 'primary', handler(){
+                console.log('Primary btn is clicked')
+                modal.close()
+            }},
+        {text: 'Cancel', type: 'danger', handler(){
+                console.log('Danger btn is clicked')
+                modal.close()
+            }}
+    ]
 }
 const modal = $.modal(options)
