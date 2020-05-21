@@ -23,10 +23,9 @@ const options = {
 }
 const modal = $.modal(options)
 
-const fruitRow = document.querySelector('.row')
 
+const fruitRow = document.querySelector('.row')
 fruits.forEach(fruit => {
-    console.log(fruit)
     const col = document.createElement('div')
     const card = document.createElement('div')
     const img = document.createElement('img')
@@ -57,18 +56,37 @@ fruits.forEach(fruit => {
     col.append(card)
 
     fruitRow.appendChild(col)
+
+    const priceModal = $.modal({
+        title: fruit.title,
+        closable: true,
+        content: fruit.price,
+        modalWidth: '400px',
+        buttons: [
+            {text: 'Ok', type: 'primary', handler(){
+                    priceModal.close()
+                }}
+        ]
+    })
+
+    const deleteModal = $.modal({
+        title: fruit.title,
+        closable: true,
+        content: 'Вы уверены, что хотите удалить карточку?',
+        modalWidth: '400px',
+        buttons: [
+            {text: 'Удалить', type: 'primary', handler(){
+                console.log(`${fruit.title} deleted!`)
+                }},
+            {text: 'Отмена', type: 'danger', handler(){
+                deleteModal.close()
+                }}
+        ]
+    })
+
+    primaryButton.onclick = priceModal.open
+    dangerButton.onclick = deleteModal.open
 })
 
 
-/*
-* <div class="col">
-            <div class="card">
-                <img style="height: 300px" src="https://e1.edimdoma.ru/data/ingredients/0000/2374/2374-ed4_wide.jpg?1487746348" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Яблоки</h5>
-                    <a href="#" class="btn btn-primary">Посмотреть цену</a>
-                    <a href="#" class="btn btn-danger">Удалить</a>
-                </div>
-            </div>
-        </div>
-* */
+
