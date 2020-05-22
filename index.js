@@ -69,6 +69,8 @@ document.addEventListener('click', event => {
                 <strong>${fruit.title}</strong>
             `
         }).then(() => {
+            fruits = fruits.filter(f => f.id !== id)
+            render()
             console.log('Remove')
         })
           .catch(() => {

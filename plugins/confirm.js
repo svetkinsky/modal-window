@@ -5,6 +5,9 @@ $.confirm = function (options) {
             closable: false,
             content: options.content,
             modalWidth: '400px',
+            onClose() {
+                modal.destroy()
+            },
             buttons: [
                 {text: 'Удалить', type: 'danger', handler(){
                     modal.close()
