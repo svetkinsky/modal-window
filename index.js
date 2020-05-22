@@ -23,70 +23,117 @@ const options = {
 }
 const modal = $.modal(options)
 
+const toHTML = fruit => `
+        <div class="col">
+            <div class="card">
+                <img style="height: 300px" src=${fruit.img} class="card-img-top" alt=${fruit.title}>
+                <div class="card-body">
+                    <h5 class="card-title">${fruit.title}</h5>
+                    <a href="#" class="btn btn-primary" data-btn="price" data-id="${fruit.id}">Посмотреть цену</a>
+                    <a href="#" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>`
 
-const fruitRow = document.querySelector('.row')
-fruits.forEach(fruit => {
-    const col = document.createElement('div')
-    const card = document.createElement('div')
-    const img = document.createElement('img')
-    const cardBody = document.createElement('div')
-    const cardTitle = document.createElement('h5')
-    const primaryButton = document.createElement('button')
-    const dangerButton = document.createElement('button')
+const render = () => {
+    document.querySelector('#fruits').innerHTML = fruits.map(toHTML).join('')
+}
 
-    col.classList.add('col')
-    card.classList.add('card')
-    img.setAttribute('src', fruit.img)
-    img.style = 'height: 300px'
-    cardBody.classList.add('card-body')
-    cardTitle.classList.add('card-title')
-    cardTitle.textContent = fruit.title
-    primaryButton.classList.add('btn', 'btn-primary')
-    primaryButton.textContent = 'Посмотреть цену'
-    dangerButton.classList.add('btn', 'btn-danger')
-    dangerButton.textContent = 'Удалить'
+render()
 
-    cardBody.append(cardTitle)
-    cardBody.append(primaryButton)
-    cardBody.append(dangerButton)
-
-    card.append(img)
-    card.append(cardBody)
-
-    col.append(card)
-
-    fruitRow.appendChild(col)
-
-    const priceModal = $.modal({
-        title: fruit.title,
-        closable: true,
-        content: fruit.price,
-        modalWidth: '400px',
-        buttons: [
-            {text: 'Ok', type: 'primary', handler(){
-                    priceModal.close()
-                }}
-        ]
-    })
-
-    const deleteModal = $.modal({
-        title: fruit.title,
-        closable: true,
-        content: 'Вы уверены, что хотите удалить карточку?',
-        modalWidth: '400px',
-        buttons: [
-            {text: 'Удалить', type: 'primary', handler(){
-                console.log(`${fruit.title} deleted!`)
-                }},
-            {text: 'Отмена', type: 'danger', handler(){
-                deleteModal.close()
-                }}
-        ]
-    })
-
-    primaryButton.onclick = priceModal.open
-    dangerButton.onclick = deleteModal.open
+const priceModal = $.modal({
+    title: 'Цена',
+    closable: true,
+    modalWidth: '400px',
+    buttons: [
+        {text: 'Закрыть', type: 'primary', handler(){
+                priceModal.close()
+            }}
+    ]
 })
+
+document.addEventListener('click', event => {
+    event.preventDefault()
+    const id = +event.target.dataset.id
+
+    if (event.target.dataset.btn === 'price') {
+        const fruit = fruits.find(f => f.id === id)
+        priceModal.setContent(`
+            <p>Цена на ${fruit.title}: <strong>${fruit.price}$</strong></p>
+        `)
+        priceModal.open()
+    }
+})
+
+
+// const fruitRow = document.querySelector('#fruits')
+// fruits.forEach(fruit => {
+//     const col = document.createElement('div')
+//     const card = document.createElement('div')
+//     const img = document.createElement('img')
+//     const cardBody = document.createElement('div')
+//     const cardTitle = document.createElement('h5')
+//     const primaryButton = document.createElement('button')
+//     const dangerButton = document.createElement('button')
+//
+//     col.classList.add('col')
+//     card.classList.add('card')
+//     card.style = 'width: 350px'
+//     img.setAttribute('src', fruit.img)
+//     img.style = 'height: 290px; width: 340px;'
+//     cardBody.classList.add('card-body')
+//     cardTitle.classList.add('card-title')
+//     cardTitle.textContent = fruit.title
+//     primaryButton.classList.add('btn', 'btn-primary')
+//     primaryButton.textContent = 'Посмотреть цену'
+//     dangerButton.classList.add('btn', 'btn-danger')
+//     dangerButton.textContent = 'Удалить'
+//
+//     cardBody.append(cardTitle)
+//     cardBody.append(primaryButton)
+//     cardBody.append(dangerButton)
+//
+//     card.append(img)
+//     card.append(cardBody)
+//
+//     col.append(card)
+//
+//     fruitRow.appendChild(col)
+//
+//     const priceModal = $.modal({
+//         title: fruit.title,
+//         closable: true,
+//         content: fruit.price,
+//         modalWidth: '400px',
+//         buttons: [
+//             {text: 'Ok', type: 'primary', handler(){
+//                     priceModal.close()
+//                 }}
+//         ]
+//     })
+//
+//     const deleteModal = $.modal({
+//         title: fruit.title,
+//         closable: true,
+//         content: 'Вы уверены, что хотите удалить карточку?',
+//         modalWidth: '400px',
+//         buttons: [
+//             {text: 'Удалить', type: 'primary', handler(){
+//                 col.parentNode.removeChild(col)
+//                 primaryButton.removeEventListener('click',priceModal.open)
+//                 dangerButton.removeEventListener('click', deleteModal.open)
+//                 deleteModal.close()
+//                 console.log(`${fruit.title} deleted!`)
+//                 }},
+//             {text: 'Отмена', type: 'danger', handler(){
+//                 deleteModal.close()
+//                 }}
+//         ]
+//     })
+//
+//     primaryButton.onclick = priceModal.open
+//     dangerButton.onclick = deleteModal.open
+// })
 
 
 
